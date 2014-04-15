@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Runtime.Serialization;
 
 using CoreFramework.Models;
 
@@ -20,11 +21,16 @@ namespace CoreFramework.Builders
                     constructorModelAtHand.hasNoArgConstructor() + " " + 
                     constructorModelAtHand.getClassOfContructor() +
                     compType.getActualTypeName());
-                Type typeToBuild = Type.GetType(compType.getActualTypeName());
                 objToBuild = Activator.CreateInstance(compType.getRepresentationalTypeFromAssembly());
             } else {
                 //Logic to handle where no no-arg constructors exist
-            } 
+                Console.WriteLine("$$$$$Retrieving a uninitialized object");
+                objToBuild = FormatterServices.GetUninitializedObject(
+                                         compType.getRepresentationalTypeFromAssembly());
+                var constructor = compType.getRepresentationalTypeFromAssembly().GetConstructor(Type.EmptyTypes);
+                //constructor.Invoke(uninitializedObject, null);
+            }
+            Console.WriteLine(objToBuild);
             return objToBuild;   
         }
     }
