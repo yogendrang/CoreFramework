@@ -17,7 +17,7 @@ namespace CoreFramework.Modes
 
         public static Assembly generatedAssemblyAtHand;
 
-        public static void doConfiguration()
+        public static bool doConfiguration()
         {
             Console.WriteLine("In server mode");
             string dllPath = ConfigurationManager.AppSettings["dllFilePath"];
@@ -34,16 +34,18 @@ namespace CoreFramework.Modes
                 Environment.Exit(0);
             }
 
-            DLLProcessor.populateUserSelectedClassesAndMethods(dLLAtHand);
-            DLLProcessor.populateComplexTypes(dLLAtHand);
+            dLLAtHand = DLLProcessor.populateComplexTypes(dLLAtHand);
+            dLLAtHand = DLLProcessor.populateUserSelectedClassesAndMethods(dLLAtHand);
 
             Assembly assemblyAtHand = new ControllerGenerator().generateControllersAndDll(dLLAtHand);
             if (assemblyAtHand != null)
             {
                 generatedAssemblyAtHand = assemblyAtHand;
                 dLLAtHand.generateXml();
+                return true;
             }
 
+            return false;
         }
     }
 }

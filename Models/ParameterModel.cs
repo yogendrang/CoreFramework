@@ -13,6 +13,10 @@ namespace CoreFramework.Models
     {
         private MethodModel methodThisParameterBelongsTo;
         private string parameterName;
+        
+        //If the param type is complex the name of the param will have "obj" appended to it
+        // hence using a field as against hard coding in order to be able to customize
+        private string parameterCompTypeName;
         //place holder for actual type in case type is changed to string if its complex
         private Type actualType;
         private Type typeOfParameter;
@@ -27,18 +31,29 @@ namespace CoreFramework.Models
             this.actualType = typeOfParameter;
             this.positionOfParameter = positionOfParameter;
             this.methodThisParameterBelongsTo = methodThisParameterBelongsTo;
-            this.isComplexType = determineIfParamIsComplex(typeOfParameter);
-            if (this.isComplexType)
+            this.isComplexType = TypeUtil.isComplexType(actualType);
+
+            //Console.WriteLine("Complex Type encountered " + this.parameterName + " "
+            //        + this.typeOfParameter + " " + this.parameterCompTypeName + " " + this.isParameterComplex() + " " + typeOfParameter);
+            //if (this.isComplexType)
             {
                 this.parameterName += "TO";
-                Console.WriteLine("Complex Type encountered");
+                //Set type to string
                 this.typeOfParameter = this.parameterName.GetType();
+                this.parameterCompTypeName = this.parameterName + "AsObj";
+                //Console.WriteLine("Complex Type encountered " + this.parameterName + " " 
+                //    + this.typeOfParameter + " " + this.parameterCompTypeName + " " + this.isParameterComplex());
             }
         }
 
         public string getParameterName()
         {
             return parameterName;
+        }
+
+        public string getParameterCompTypeName()
+        {
+            return parameterCompTypeName;
         }
 
         public Type getTypeOfParameter()

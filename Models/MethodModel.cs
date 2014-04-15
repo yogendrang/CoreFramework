@@ -104,9 +104,11 @@ namespace CoreFramework.Models
         private StringBuilder methodInternalContentGenerator()
         {
             StringBuilder codeForMethodInternals = new StringBuilder();
+            
             codeForMethodInternals.Append("string assemblyName = \"")
             .Append(this.getClassThisMethodBelongsTo().getDllThisClassBelongsTo()
                 .getFullyQualifiedPath().Replace("\\", "\\\\") + "\";")
+            .AppendLine(this.initializeParamComplexObjs())
             .AppendLine("string className = \"" + this.getClassThisMethodBelongsTo().getClassName()
                 + "\";")
             .AppendLine("System.Reflection.Assembly assembly =" +
@@ -114,10 +116,6 @@ namespace CoreFramework.Models
             .AppendLine("System.Type type = assembly.GetType(className);")
             .AppendLine("string methodName = \"" + this.getMethodName() + "\";")
             .AppendLine("object classInstance =  System.Activator.CreateInstance(type);")
-            .AppendLine("Console.WriteLine(CoreFramework.ObjectProcessor.printContentOfString());")
-            //.AppendLine("CoreFramework.ObjectProcessor.setContentToString(\"New Content\");")
-            //.AppendLine("Console.WriteLine(CoreFramework.ObjectProcessor.printContentOfString());")
-            //.AppendLine("CoreFramework.ObjectProcessor.printWooHoo();")
             .AppendLine("System.Reflection.MethodInfo methodInfo = type.GetMethod(methodName);");
 
             if (this.getNumberOfMethodParameters() == 0)
@@ -140,6 +138,29 @@ namespace CoreFramework.Models
             return codeForMethodInternals;
         }
 
+        private string initializeParamComplexObjs()
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (KeyValuePair<int, ParameterModel> pair in this.getAllParametersInThisMethod())
+            {
+                ParameterModel paramAtHand = pair.Value;
+                string dllFileName = this.getClassThisMethodBelongsTo().getDllThisClassBelongsTo().getDllFileName();
+                if (paramAtHand.isParameterComplex())
+                {
+                    //Something like object sampleClassTwoTOObj 
+                    //= CoreFramework.prepCompTypeForInvocation(dllFileName, complexTypeName, jsonAsString);
+                    sb.AppendLine("object " + paramAtHand.getParameterCompTypeName());
+                    sb.Append(" = CoreFramework.ObjectProcessor.prepCompTypeForInvocation(");
+                    sb.Append("\"" + dllFileName + "\"" + ",");
+                    sb.Append("\"" + paramAtHand.getActualType() + "\"" + ",");
+                    sb.Append(paramAtHand.getParameterName());
+                    sb.Append(");");
+                }
+            }
+
+            return sb.ToString();
+        }
+
         private string generateParamArrayForDLLInvocation()
         {
             string stringOfDLLMethodParams = "";
@@ -148,7 +169,16 @@ namespace CoreFramework.Models
             foreach (KeyValuePair<int, ParameterModel> pair in this.getAllParametersInThisMethod())
             {
                 i++;
-                stringOfDLLMethodParams += ((ParameterModel) pair.Value).getParameterName();
+                ParameterModel paramAtHand = pair.Value;
+                if (paramAtHand.isParameterComplex())
+                {
+                    stringOfDLLMethodParams += paramAtHand.getParameterCompTypeName();
+                }
+                else
+                {
+                    stringOfDLLMethodParams += paramAtHand.getParameterName();
+                }
+                
                 if (i != this.getNumberOfMethodParameters())
                 {
                     stringOfDLLMethodParams += ", ";
@@ -166,7 +196,17 @@ namespace CoreFramework.Models
             {
                 i++;
                 ParameterModel paramAtHand = pair.Value;
-                paramListAsString += paramAtHand.getTypeOfParameter() + " " + paramAtHand.getParameterName();
+
+                if (paramAtHand.isParameterComplex())
+                {
+                    paramListAsString += "string " + paramAtHand.getParameterName();
+                }
+                else
+                {
+                    Console.WriteLine("Not Complex");
+                    paramListAsString += paramAtHand.getTypeOfParameter() + " " + paramAtHand.getParameterName();
+                }
+
                 if (i != this.getNumberOfMethodParameters())
                 {
                     paramListAsString += ", ";

@@ -7,8 +7,8 @@ using CoreFramework.Models;
 
 namespace CoreFramework.Extractors
 {
-    class iExtractor
+    interface iExtractor
     {
-        public ComplexTypeModel extract(ComplexTypeModel compTypeAtHand, Type classAtHand);
+       ComplexTypeModel extract(ComplexTypeModel compTypeAtHand, Type classAtHand);
     }
 }

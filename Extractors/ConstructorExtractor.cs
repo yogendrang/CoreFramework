@@ -21,8 +21,8 @@ namespace CoreFramework.Extractors
                 //Class doesnt have no-arg constructor,extract other constructors
                 constructorAtHand.setNoArgConstructor(false);
                 ConstructorInfo[] constructors = classAtHand.GetConstructors();
-            }            
-
+            }
+            compTypeAtHand.setConstructorModel(constructorAtHand);
             return compTypeAtHand;
         }
     }

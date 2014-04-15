@@ -15,7 +15,7 @@ namespace CoreFramework.Extractors
         {
             Dictionary<string, FieldModel> allFieldsInComplexType = compTypeAtHand.getAllFieldsInThisComplexType();
             FieldInfo[] fieldInfo = classAtHand.GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static | BindingFlags.Instance);
-            Console.WriteLine("Length of Fields is " + fieldInfo.Length);
+            //Console.WriteLine("Length of Fields is " + fieldInfo.Length);
 
             for (int i = 0; i < fieldInfo.Length; i++)
             {
@@ -27,6 +27,7 @@ namespace CoreFramework.Extractors
                 FieldModel fieldAtHand = new FieldModel(tmpFieldName, tmpFieldType);
                 allFieldsInComplexType.Add(fieldAtHand.getFieldName(), fieldAtHand);
             }
+            //Console.WriteLine("Added complex type " + compTypeAtHand.getActualTypeName());
             return compTypeAtHand;
         }
     }

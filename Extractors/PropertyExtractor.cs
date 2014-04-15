@@ -16,7 +16,7 @@ namespace CoreFramework.Extractors
             Dictionary<string, PropertyModel> allPropertiesInComplexType = compTypeAtHand.getAllPropertiesInThisComplexType();
             PropertyInfo[] propertyInfo = classAtHand.GetProperties(BindingFlags.NonPublic | 
                          BindingFlags.Public | BindingFlags.Static | BindingFlags.Instance);
-            Console.WriteLine("Length of Properties is " + propertyInfo.Length);
+            //Console.WriteLine("Length of Properties is " + propertyInfo.Length);
 
             for (int i = 0; i < propertyInfo.Length; i++)
             {

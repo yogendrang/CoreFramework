@@ -16,7 +16,6 @@ using CoreFramework.Extractors;
 
 namespace CoreFramework.Processor
 {
-
     public class DLLProcessor
     {
         private enum RegKind
@@ -215,7 +214,7 @@ namespace CoreFramework.Processor
             return dllAtHand;
         }
 
-        public static void populateComplexTypes(DLLModel dllAtHand)
+        public static DLLModel populateComplexTypes(DLLModel dllAtHand)
         {
             Assembly dLLAssembly = Assembly.LoadFile(dllAtHand.getFullyQualifiedPath());
             IEnumerable<TypeInfo> myTypes = dLLAssembly.DefinedTypes;
@@ -231,6 +230,7 @@ namespace CoreFramework.Processor
                 }
             }
             ObjectProcessor.getComplexTypesAcrossDlls().Add(dllAtHand.getDllFileName(), complexTypesInDll);
+            return dllAtHand;
         }
 
         private static ComplexTypeModel createComplexModel(string typeName, Assembly dLLAssembly)
@@ -239,6 +239,7 @@ namespace CoreFramework.Processor
             ComplexTypeModel complexTypeAtHand = new ComplexTypeModel(typeName);
             iExtractor extractor = new ObjectExtractor();
             complexTypeAtHand = extractor.extract(complexTypeAtHand, classType);
+            complexTypeAtHand.setRepresentationalTypeFromAssembly(classType);
 
             return complexTypeAtHand;
         }

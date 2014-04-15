@@ -11,6 +11,6 @@ namespace CoreFramework.Builders
 {
     interface iBuilder
     {
-        public T build<T>(ComplexTypeModel compType, IDictionary<string, object> jsonAsObject, T objectAtHand);
+        T build<T>(ComplexTypeModel compType, IDictionary<string, object> jsonAsObject, T objectAtHand);
     }
 }

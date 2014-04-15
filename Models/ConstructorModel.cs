@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CoreFramework.Models
 {
-    class ConstructorModel
+    public class ConstructorModel
     {
         private int numberOfConstructors;
         private string className;
@@ -36,6 +36,11 @@ namespace CoreFramework.Models
         public void setNoArgConstructor(bool boolHasNoArgConstructor)
         {
             this.boolHasNoArgConstructor = boolHasNoArgConstructor;
+        }
+
+        public string getClassOfContructor()
+        {
+            return this.className;
         }
     }
 }

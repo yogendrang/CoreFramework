@@ -12,6 +12,7 @@ namespace CoreFramework.Models
     {
         private string propertyName;
         private Type propertyType;
+        private bool isPropertyComplex;
 
         protected PropertyModel(SerializationInfo info, StreamingContext ctx)
         {
@@ -33,6 +34,11 @@ namespace CoreFramework.Models
         public Type getPropertyType()
         {
             return this.propertyType;
+        }
+
+        public bool isComplexProperty()
+        {
+            return this.isPropertyComplex;
         }
 
         public void GetObjectData(SerializationInfo info, StreamingContext ctxt)

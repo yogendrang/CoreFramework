@@ -10,12 +10,13 @@ namespace CoreFramework.Utils
     {
         public static bool isComplexType(Type typeOfObject)
         {
+            
             bool isParamComplexType = false;
             if (!typeOfObject.Namespace.StartsWith("System"))
             {
                 isParamComplexType = true;
             }
-
+            //Console.WriteLine("TypeUtil " + typeOfObject + " " + isParamComplexType);
             return isParamComplexType;
         }
 

@@ -13,9 +13,15 @@ namespace CoreFramework.Builders
         public object build(ComplexTypeModel compType)
         {
             object objToBuild = null;
-            if(compType.getConstructorModel().hasNoArgConstructor()){
+            ConstructorModel constructorModelAtHand = compType.getConstructorModel();
+            if (constructorModelAtHand.hasNoArgConstructor())
+            {
+                Console.WriteLine("Constructor Info " + 
+                    constructorModelAtHand.hasNoArgConstructor() + " " + 
+                    constructorModelAtHand.getClassOfContructor() +
+                    compType.getActualTypeName());
                 Type typeToBuild = Type.GetType(compType.getActualTypeName());
-                objToBuild = Activator.CreateInstance(typeToBuild);
+                objToBuild = Activator.CreateInstance(compType.getRepresentationalTypeFromAssembly());
             } else {
                 //Logic to handle where no no-arg constructors exist
             } 

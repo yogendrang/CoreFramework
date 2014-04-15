@@ -46,7 +46,7 @@ namespace CoreFramework.Builders
 
             //At this stage its neither a collection/array or complex object
 
-
+            objectAtHand = buildSimpleField(compType, objectAtHand, jsonAsObject, fieldAtHand);
 
 
             return objectAtHand;
@@ -80,7 +80,7 @@ namespace CoreFramework.Builders
         {
             object jsonEquivalent = jsonObject[fieldAtHand.getFieldName()];
 
-            //SimpleType -- So Json equivalent should be neither array, collection or complexobject
+            //SimpleType -- So Json equivalent should be neither array, collection or complex object
             Type typeOfJsonEquivalentObject = jsonEquivalent.GetType();
             if (!TypeUtil.isArrayType(typeOfJsonEquivalentObject) 
                     && !TypeUtil.isCollectionType(typeOfJsonEquivalentObject)
@@ -92,8 +92,11 @@ namespace CoreFramework.Builders
                 object fieldValue = jsonEquivalent;
                 try
                 {
+                    //Console.WriteLine("Printing Type of " + fieldAtHand.getFieldName() + " " + 
+                    //    fieldAtHand.getFieldType() + " " + fieldValue.GetType());
                     fieldValue = Convert.ChangeType(fieldValue, fieldAtHand.getFieldType());
-                    fieldInfo.SetValue(jsonObject, fieldValue);
+                    fieldInfo.SetValue(objectAtHand, fieldValue);
+                    Console.WriteLine("Setting Value " + " " + " " + fieldValue);
                 }
                 catch (Exception ex)
                 {

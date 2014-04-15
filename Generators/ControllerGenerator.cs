@@ -25,7 +25,6 @@ namespace CoreFramework.Generators
             System.IO.File.WriteAllText(file.FullName, warningText);
 
             string outputDll = ".\\" + dllAtHand.getDllFileName() + "\\" + dllAtHand.getDllFileName() + "_controllers" + ".dll";
-            //string outputDll = "c:\\playdll\\" + dllAtHand.getDllFileName() + "_controllers" + ".dll";
             string codeForDllContents = dllAtHand.generateCodeForDllContents();
 
             System.IO.File.WriteAllText(".\\" + dllAtHand.getDllFileName() + "\\" + dllAtHand.getDllFileName() + ".txt", codeForDllContents);

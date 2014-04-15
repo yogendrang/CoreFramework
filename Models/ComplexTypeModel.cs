@@ -22,6 +22,7 @@ namespace CoreFramework.Models
         private ConstructorModel constructorModel;
         private string actualTypeName;
         private string dllFileThisTypeBelongsTo;
+        private Type representationalTypeFromAssembly;
 
         public string getActualTypeName()
         {
@@ -66,6 +67,16 @@ namespace CoreFramework.Models
         public void setConstructorModel(ConstructorModel constModel)
         {
             this.constructorModel = constModel;
+        }
+
+        public void setRepresentationalTypeFromAssembly(Type representationalTypeFromAssembly)
+        {
+            this.representationalTypeFromAssembly = representationalTypeFromAssembly;
+        }
+
+        public Type getRepresentationalTypeFromAssembly()
+        {
+            return this.representationalTypeFromAssembly;
         }
 
         public void GetObjectData(SerializationInfo info, StreamingContext ctxt)

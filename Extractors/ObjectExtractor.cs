@@ -13,8 +13,8 @@ namespace CoreFramework.Extractors
     {
         public ComplexTypeModel extract(ComplexTypeModel compTypeAtHand, Type classAtHand)
         {
-            iExtractor[] extractors = new iExtractor[] { new FieldExtractor(), new PropertyExtractor()
-                                                  , new ConstructorExtractor(), new StructExtractor()};
+            iExtractor[] extractors = new iExtractor[] { new FieldExtractor()
+                , new ConstructorExtractor(), new StructExtractor()};
 
             for (int i = 0; i < extractors.Length; i++)
             {
