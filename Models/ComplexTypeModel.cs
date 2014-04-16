@@ -65,6 +65,8 @@ namespace CoreFramework.Models
 
             classWriter.WriteStartElement("complexType");
 
+            classWriter.WriteElementString("typeName", this.actualTypeName);
+
             foreach (KeyValuePair<string, FieldModel> pair in this.getAllFieldsInThisComplexType())
             {
                 FieldModel fieldAtHand = pair.Value;
