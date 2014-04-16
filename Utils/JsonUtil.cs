@@ -18,5 +18,11 @@ namespace CoreFramework.Utils
             IDictionary<string, object> propertyValues = (IDictionary<string, object>) jsonAsExpando;
             return propertyValues;
         }
+
+        public static IDictionary<string, object>  fetchAsDictFromExpando(ExpandoObject expando)
+        {
+            IDictionary<string, object> propertyValues = (IDictionary<string, object>) expando;
+            return propertyValues;
+        }
     }
 }

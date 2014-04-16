@@ -41,7 +41,17 @@ namespace CoreFramework.Builders
 
             if (fieldAtHand.isComplexField())
             {
-                objectAtHand = buildComplexField(compType, objectAtHand, jsonAsObject, fieldAtHand);
+                object tempObject = jsonAsObject[fieldAtHand.getFieldName()];
+
+                if (!tempObject.GetType().ToString().Equals(new ExpandoObject().GetType().ToString()))
+                {
+                    throw new BuilderException("JSON not matching up to complex type " + fieldAtHand.getFieldName() +
+                       "Should be ExpandoObject but found " +
+                           tempObject.GetType());
+                }
+
+                ExpandoObject tempExpandoObject = (ExpandoObject)tempObject;
+                objectAtHand = buildComplexField(compType, objectAtHand, tempExpandoObject, fieldAtHand);
             }
 
             //At this stage its neither a collection/array or complex object
@@ -60,10 +70,21 @@ namespace CoreFramework.Builders
         }
 
         private T buildComplexField<T>(ComplexTypeModel compType, T objectAtHand,
-                                                   IDictionary<string, object> jsonEquivalent, FieldModel fieldAtHand)
+                                                   ExpandoObject jsonEquivalent, FieldModel fieldAtHand)
         {
-            objectAtHand = (T) ObjectProcessor.prepCompTypeForInvocation(compType.getDllFileThisTypeBelongsTo()
+            Console.WriteLine(jsonEquivalent);
+            //object jsonEquivalentObject = jsonEquivalent[fieldAtHand.getFieldName()];
+
+            object valueObj = (T)ObjectProcessor.prepCompTypeForInvocation(compType.getDllFileThisTypeBelongsTo()
                              , fieldAtHand.getFieldType() + "", jsonEquivalent);
+
+           FieldInfo fieldInfo = objectAtHand.GetType().GetField(fieldAtHand.getFieldName(),
+                      BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static | BindingFlags.Instance);
+                Console.WriteLine("Setting a complex object of type " + valueObj.GetType()
+                    + " to a complex field " + fieldAtHand.getFieldName() + " of type " + fieldInfo.FieldType);
+           fieldInfo.SetValue(objectAtHand, valueObj);
+
+            
             return objectAtHand;
         }
 
@@ -107,7 +128,7 @@ namespace CoreFramework.Builders
             {
                 throw new BuilderException("JSON not matching up to complex type " + fieldAtHand.getFieldName() + 
                        "Should not be array, collection or complex type instead found " +
-                           typeOfJsonEquivalentObject);
+                           typeOfJsonEquivalentObject.GetType());
             }
             
             return objectAtHand;
