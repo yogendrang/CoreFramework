@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Runtime.Serialization;
+using System.IO;
 
 
 namespace CoreFramework.Models
@@ -56,7 +57,26 @@ namespace CoreFramework.Models
 
         public XmlReader generateXml()
         {
-            return null;
+            MemoryStream stream = new MemoryStream();
+            XmlWriterSettings writerSettings = new XmlWriterSettings();
+            writerSettings.OmitXmlDeclaration = true;
+            writerSettings.Indent = true;
+            XmlWriter classWriter = XmlWriter.Create(stream, writerSettings);
+
+            classWriter.WriteStartElement("complexType");
+
+            foreach (KeyValuePair<string, FieldModel> pair in this.getAllFieldsInThisComplexType())
+            {
+                FieldModel fieldAtHand = pair.Value;
+                classWriter.WriteNode(fieldAtHand.generateXml(), false);
+            }
+
+            classWriter.WriteEndElement();
+            classWriter.Flush();
+            stream.Position = 0;
+            XmlReader xmlReader = XmlReader.Create(stream);
+            classWriter.Close();
+            return xmlReader;
         }
 
         public ConstructorModel getConstructorModel()

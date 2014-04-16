@@ -111,8 +111,18 @@ namespace CoreFramework.Models
                     writer.WriteNode(xmlReaderForClass, true);
                     
                 }
-
                 writer.WriteEndElement();
+
+                writer.WriteStartElement("allComplexTypesInDll");
+                foreach (KeyValuePair<string, ComplexTypeModel> pair in this.getAllComplexTypesInDLL())
+                {
+                    ComplexTypeModel complexTypeAtHand = pair.Value;
+                    XmlReader xmlReaderForField = complexTypeAtHand.generateXml();
+
+                    writer.WriteNode(xmlReaderForField, true);
+                }
+                writer.WriteEndElement();
+
                 writer.WriteEndElement();
                 writer.WriteEndDocument();
                 writer.Close();

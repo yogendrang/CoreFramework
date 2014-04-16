@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Runtime.Serialization;
+using System.IO;
 
 using CoreFramework.Utils;
 
@@ -48,7 +49,23 @@ namespace CoreFramework.Models
 
         public XmlReader generateXml()
         {
-            return null;
+            MemoryStream stream = new MemoryStream();
+            XmlWriterSettings writerSettings = new XmlWriterSettings();
+            writerSettings.OmitXmlDeclaration = true;
+            writerSettings.Indent = true;
+            XmlWriter classWriter = XmlWriter.Create(stream, writerSettings);
+            
+            classWriter.WriteStartElement("field");
+            classWriter.WriteElementString("fieldName", this.fieldName);
+            classWriter.WriteElementString("fieldType", this.fieldType + "");
+            classWriter.WriteEndElement();
+
+            classWriter.Flush();
+            stream.Position = 0;
+
+            XmlReader xmlReader = XmlReader.Create(stream);
+            classWriter.Close();
+            return xmlReader;
         }
 
         public void GetObjectData(SerializationInfo info, StreamingContext ctxt)
